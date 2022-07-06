@@ -5,7 +5,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 // on cree notre schema de donnees
 const userSchema = mongoose.Schema({
-    pseudo: { type: String, require: true },
+    pseudo: { type: String, require: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true }
   });
@@ -13,4 +13,4 @@ const userSchema = mongoose.Schema({
 // on applique le plugin unique validator a notre schema de donnees
 userSchema.plugin(uniqueValidator);
 // On exporte notre schemat de donnees utilisateur
-module.exports = mongoose.model('user', userSchema);
+module.exports = mongoose.model('User', userSchema);

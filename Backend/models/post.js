@@ -1,27 +1,13 @@
 // on importe mongoose
 const mongoose = require('mongoose');
 // On cree nos schemats de donnes
-const PostSchema = new mongoose.Schema(
+const PostSchema = mongoose.Schema(
     {
-        posterId: {
-            type: String,
-            required: true
-        },
-        message: {
-            type: String,
-            trim: true,
-            maxlength: 500,
-        },
-        picture: {
-            type: String,
-        },
-        video: {
-            type: String,
-        },
-        likers: {
-            type: [String],
-            required: true,
-        },
+        posterId: { type: String, required: true },
+        message: { type: String, trim: true, maxlength: 500 },
+        picture: { type: String },
+        video: { type: String },
+        likers: { type: [String], required: true },
         comments: {
             type: [
                 {

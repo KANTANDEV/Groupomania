@@ -1,5 +1,5 @@
 // On importe notre schemat de donnees 
-const user = require('../models/user')
+const User = require('../models/user')
 // on importe notre package de cryptage 
 const bcrypt = require('bcrypt');
 // on importe le package de verification de token
@@ -12,6 +12,7 @@ exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
             const user = new User({
+                pseudo: req.body.pseudo,
                 email: req.body.email,
                 password: hash
             });
