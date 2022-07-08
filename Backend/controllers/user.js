@@ -4,6 +4,7 @@ const User = require('../models/user')
 const bcrypt = require('bcrypt');
 // on importe le package de verification de token
 const jwt = require('jsonwebtoken');
+const { ObjectId } = require('mongodb');
 
 ///////////////////////////////////////////////////////////////////// On cree nos controleurs de routes////////////////////////////////////////////////////////////////////////////
 
@@ -50,4 +51,23 @@ exports.login = (req, res, next) => {
                 .catch((error => res.status(500).json({ error })));
         })
         .catch(error => res.status(500).json({ error }))
+};
+
+// affiche tout les utilisateurs 
+
+exports.getAllUsers = async (req, res) => {
+    const users = await User.find().select('-password -email');
+    res.status(200).json(users);
+}
+
+// affiche un seul utilisateur en fonction de son id 
+
+exports.userInfo = (req, res) => {
+    if(!ObjectId.isValid(req.params.id))
+        return res.status(400).send('ID unknown :' + req.params.id)
+
+        User.findById(req.params.id, (err, docs) => {
+            if(!err) res.send(docs);
+            else console.log('Id unknown' + err)
+        }).select('-password -email');
 };
