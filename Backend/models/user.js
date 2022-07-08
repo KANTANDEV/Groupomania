@@ -9,6 +9,7 @@ const userSchema = mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, minLength: 6 },
   picture: { type: String, default: "./images/profil/default-user.png"},
+  admin: {type: Boolean, defaultValue: false},
   bio: { type: String, max: 1024 },
   followers: { type: [String] },
   following: { type: [String] },
