@@ -1,15 +1,16 @@
 // On importe mongoose
+const ObjectID = require("mongoose").Types.ObjectId;
 const mongoose = require('mongoose');
 // On importe le package unique validator
 const uniqueValidator = require('mongoose-unique-validator');
 
 // on cree notre schema de donnees
 const userSchema = mongoose.Schema({
-  pseudo: { type: String, require: true, unique: true },
+  pseudo: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, minLength: 6 },
-  picture: { type: String, default: "./images/profil/default-user.png"},
-  admin: {type: Boolean, defaultValue: false},
+  picture: { type: String, default: "./uploads/images/profil/default.png" },
+  admin: {type: Boolean, default: false},
   bio: { type: String, max: 1024 },
   followers: { type: [String] },
   following: { type: [String] },

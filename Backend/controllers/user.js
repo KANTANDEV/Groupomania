@@ -4,6 +4,9 @@ const User = require('../models/user')
 const bcrypt = require('bcrypt');
 // on importe le package de verification de token
 const jwt = require('jsonwebtoken');
+//on importe fs
+const fs = require('fs');
+const e = require('express');
 // On definie le ObjectId pour pouvoir verifier l'id attribue par la DB 
 const ObjectID = require("mongoose").Types.ObjectId;
 ///////////////////////////////////////////////////////////////////// On cree nos controleurs de routes ///////////////////////////////////////////////////////////////////////////
@@ -40,7 +43,7 @@ exports.login = (req, res, next) => {
                         userId: user._id,
                         token: jwt.sign(
                             { userId: user._id },
-                            'RANDOM_TOKEN_SECRET',
+                            process.env.TOKEN,
                             { expiresIn: '24h' }
                         )
 
@@ -52,6 +55,14 @@ exports.login = (req, res, next) => {
         })
         .catch(error => res.status(500).json({ error }))
 };
+
+//logout
+exports.logout = (req, res) => {
+    res.cookie('token', '', { expires: new Date(0) },)
+    res.status(200).json({ message: "logout successful" })
+}
+
+
 
 // affiche tout les utilisateurs 
 
@@ -75,8 +86,6 @@ exports.userInfo = (req, res) => {
 // Met a jours les information d'un utilisateur 
 
 exports.updateUser = async (req, res) => {
-    if (!ObjectID.isValid(req.params.id))
-        return res.status(400).send("ID unknown : " + req.params.id);
 
     try {
         await User.findOneAndUpdate(
@@ -101,8 +110,14 @@ exports.deleteUser = async (req, res) => {
         return res.status(400).send("ID unknown : " + req.params.id);
 
     try {
-        await User.remove({ _id: req.params.id }).exec();
-        res.status(200).json({ message: "User deleted !" });
+        const user = await User.findById(req.params.id)
+        if (req.params.id === user._id || user.admin) {
+            await User.deleteOne({ _id: req.params.id });
+            fs.unlinkSync(__dirname + '/.' + user.picture)
+            res.status(200).json({ message: "User deleted !" });
+        } else {
+            res.status(401).json({ message: "You are not authorized to delete this user" });
+        }
     } catch (err) {
         return res.status(500).json({ message: err });
     }
@@ -112,38 +127,38 @@ exports.follow = async (req, res) => {
     if (!ObjectID.isValid(req.params.id))
         return res.status(400).send("ID unknown : " + req.params.id || !ObjectID.isValid(req.body.idToFollow));
 
-        try {
-            await User.findOneAndUpdate(
-                { _id: req.params.id },
-                {
-                    $push: {
-                        following: req.body.idToFollow,
-                    },
+    try {
+        await User.findOneAndUpdate(
+            { _id: req.params.id },
+            {
+                $addToSet: {
+                    following: req.body.idToFollow,
                 },
-                { new: true, upsert: true, setDefaultsOnInsert: true })
-                .then((data) => res.send(data))
-                .catch((err) => res.status(500).send({ message: err }));
+            },
+            { new: true, upsert: true, setDefaultsOnInsert: true })
+            .then((data) => res.send(data))
+            .catch((err) => res.status(500).send({ message: err }));
 
 
-                await User.findOneAndUpdate(
-                    { _id: req.body.idToFollow },
-                    {
-                        $push: {
-                            followers: req.params.id,
-                        },
-                    },
-                    { new: true, upsert: true, setDefaultsOnInsert: true })
-                    // .then((data) => res.send(data))
-                    .catch((err) => res.status(500).send({ message: err }));
+        await User.findOneAndUpdate(
+            { _id: req.body.idToFollow },
+            {
+                $addToSet: {
+                    followers: req.params.id,
+                },
+            },
+            { new: true, upsert: true, setDefaultsOnInsert: true })
+            // .then((data) => res.send(data))
+            .catch((err) => res.status(500).send({ message: err }));
 
-        } catch (err) {
-            return res.status(500).json({ message: err });
-        }
+    } catch (err) {
+        return res.status(500).json({ message: err });
+    }
 }
 // Unfollow
 exports.unfollow = async (req, res) => {
     if (!ObjectID.isValid(req.params.id))
-    return res.status(400).send("ID unknown : " + req.params.id || !ObjectID.isValid(req.body.idToFollow));
+        return res.status(400).send("ID unknown : " + req.params.id || !ObjectID.isValid(req.body.idToFollow));
 
     try {
         await User.findOneAndUpdate(
