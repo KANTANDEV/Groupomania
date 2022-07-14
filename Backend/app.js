@@ -1,3 +1,5 @@
+// on importe le module helmet
+const helmet = require("helmet");
 // on importe le module express
 const express = require('express');
 // on importe mongoose
@@ -35,7 +37,14 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
 });
-
+// on configure les option de notre package helmet
+app.use(
+    helmet({
+        contentSecurityPolicy: false,
+        crossOriginEmbedderPolicy: false,
+        crossOriginResourcePolicy: false,
+    })
+);
 // on analyse les corps de donnee entrant
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));

@@ -5,7 +5,6 @@ const router = express.Router();
 // on importe nos controleurs
 const userCtrl = require('../controllers/user')
 const uploadController = require('../controllers/upload')
-
 //on importe notre middleware
 const auth = require('../middleware/auth')
 // on cree les routes de notre api qui se servent de nos controllers
@@ -18,7 +17,7 @@ router.put('/:id', auth,  userCtrl.updateUser)
 router.delete('/:id', auth, userCtrl.deleteUser)
 router.patch('/follow/:id', auth, userCtrl.follow)
 router.patch('/unfollow/:id',auth, userCtrl.unfollow)
-
+// upload
 router.post('/upload', profil, uploadController.uploadProfil)
 // on exporte notre router
 module.exports = router;

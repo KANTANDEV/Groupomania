@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 //on importe fs
 const fs = require('fs');
 const e = require('express');
+const user = require('../models/user');
 // On definie le ObjectId pour pouvoir verifier l'id attribue par la DB 
 const ObjectID = require("mongoose").Types.ObjectId;
 ///////////////////////////////////////////////////////////////////// On cree nos controleurs de routes ///////////////////////////////////////////////////////////////////////////
@@ -58,8 +59,8 @@ exports.login = (req, res, next) => {
 
 //logout
 exports.logout = (req, res) => {
-    res.cookie('token', '', { expires: new Date(0) },)
-    res.status(200).json({ message: "logout successful" })
+    // res.cookie('token', '', { expires: new Date(0) },)
+    res.status(200).json({ token: jwt.sign( {userId: user._id}, "LOGOUT", { expiresIn: "0"}), message: "logout successful" })
 }
 
 
@@ -74,7 +75,7 @@ exports.getAllUsers = async (req, res) => {
 // affiche un seul utilisateur en fonction de son id 
 
 exports.userInfo = (req, res) => {
-    if (!ObjectId.isValid(req.params.id))
+    if (!ObjectID.isValid(req.params.id))
         return res.status(400).send('ID unknown :' + req.params.id)
 
     User.findById(req.params.id, (err, docs) => {
@@ -111,7 +112,7 @@ exports.deleteUser = async (req, res) => {
 
     try {
         const user = await User.findById(req.params.id)
-        if (req.params.id === user._id || user.admin) {
+        if (req.params.id == user._id || user.admin) {
             await User.deleteOne({ _id: req.params.id });
             fs.unlinkSync(__dirname + '/.' + user.picture)
             res.status(200).json({ message: "User deleted !" });

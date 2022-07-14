@@ -5,7 +5,6 @@ const postController = require('../controllers/post');
 //on importe notre middleware
 const auth = require('../middleware/auth');
 const post = require('../middleware/multer-config-post');
-
 // On cree notre CRUD
 //POSTS
 router.post('/', auth, post, postController.createPost);
@@ -18,5 +17,6 @@ router.patch('/unlike-post/:id', auth, postController.unlikePost);
 router.patch('/comment-post/:id', auth, postController.commentPost);
 router.patch('/edit-comment-post/:id',  auth, postController.editCommentPost);
 router.patch('/delete-comment-post/:id', auth,  postController.deleteCommentPost);
-
+// upload
+// router.post('/upload', post, postController.createPost)
 module.exports = router;
