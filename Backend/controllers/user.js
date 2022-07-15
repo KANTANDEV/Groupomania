@@ -10,47 +10,47 @@ const e = require('express');
 const user = require('../models/user');
 // On definie le ObjectId pour pouvoir verifier l'id attribue par la DB 
 const ObjectID = require("mongoose").Types.ObjectId;
+const { signUpErrors, errpass} = require('../utils/errors');
 ///////////////////////////////////////////////////////////////////// On cree nos controleurs de routes ///////////////////////////////////////////////////////////////////////////
 
 // Inscription
-exports.signup = (req, res, next) => {
+exports.signup = async (req, res) => {
+    const verifpassword = req.body.password
+    let errs = {password: ""}
+    const statuspass = errpass(errs);
+    if (`${verifpassword.length}` < 6 ) return res.status(400).json({ errors:"Le mot de passe doit faire 6 caractères minimum"})
+    
     bcrypt.hash(req.body.password, 10)
-        .then(hash => {
-            const user = new User({
-                pseudo: req.body.pseudo,
-                email: req.body.email,
-                password: hash
-            });
-            user.save()
-                .then(() => res.status(201).json({ message: "utilisateur créé" }))
-                .catch(error => res.status(400).json({ error }))
-        })
-        .catch(error => res.status(500).json({ error }))
-};
+   
+            .then(hash => {
+                const user = new User({
+                    pseudo: req.body.pseudo,
+                    email: req.body.email,
+                    password: hash
+                });
+                user.save()
+                    .then(() => res.status(201).json({ message: "utilisateur créé" }))
+                    .catch(err => {
+                        const errors = signUpErrors(err);
+                        res.status(400).send({ errors  })
+                    })
+            })     
+    }
 
 // connection
 exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email })
         .then(user => {
             if (!user) {
-                return res.status(401).json({ error: "utilisateur inexistant" })
+                return res.status(401).json({ error: 'Email invalide' })
             }
             bcrypt.compare(req.body.password, user.password)
                 .then(valid => {
                     if (!valid) {
-                        return res.status(401).json({ error: "mot de passe erroné" })
+                        return res.status(401).json({ error: 'Mot de passe invalide' })
                     }
-                    res.status(200).json({
-                        userId: user._id,
-                        token: jwt.sign(
-                            { userId: user._id },
-                            process.env.TOKEN,
-                            { expiresIn: '24h' }
-                        )
-
-
-
-                    })
+                    res.cookie('token', jwt.sign({ userId: user._id }, process.env.TOKEN, { expiresIn: "1h" }))
+                    res.status(200).json({ message: 'Connexion réussie' })
                 })
                 .catch((error => res.status(500).json({ error })));
         })
@@ -59,8 +59,8 @@ exports.login = (req, res, next) => {
 
 //logout
 exports.logout = (req, res) => {
-    // res.cookie('token', '', { expires: new Date(0) },)
-    res.status(200).json({ token: jwt.sign( {userId: user._id}, "LOGOUT", { expiresIn: "0"}), message: "logout successful" })
+    res.cookie('token', jwt.sign({ userId: user._id }, process.env.TOKEN, { expiresIn: "0" }))
+    res.status(200).json({ message: 'Deconnexion réussite' })
 }
 
 

@@ -1,14 +1,16 @@
+'use strict';
 // On importe mongoose
-const ObjectID = require("mongoose").Types.ObjectId;
 const mongoose = require('mongoose');
 // On importe le package unique validator
 const uniqueValidator = require('mongoose-unique-validator');
-
+const Schema = mongoose.Schema;
 // on cree notre schema de donnees
-const userSchema = mongoose.Schema({
+const userSchema = new Schema(
+ {
+  
   pseudo: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true, minLength: 6 },
+  password: { type: String, required:true},
   picture: { type: String, default: "./uploads/images/profil/default.png" },
   admin: {type: Boolean, default: false},
   bio: { type: String, max: 1024 },
@@ -16,7 +18,10 @@ const userSchema = mongoose.Schema({
   following: { type: [String] },
   likes: { type: [String] }
 },
-  { timestamps: true }
+  { timestamps: true },
+  {strict: true},
+  {safe: true},
+  {majority: true}
 )
 
 // on applique le plugin unique validator a notre schema de donnees

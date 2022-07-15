@@ -10,6 +10,8 @@ const path = require('path');
 const dotenv = require('dotenv');
 // on configure notre package
 dotenv.config()
+// on importe cors
+const cors = require('cors');
 // on importe body parser qui qnqlyse les corps de requete entrant
 const bodyParser = require('body-parser');
 // on cree l'application express
@@ -25,18 +27,20 @@ mongoose.connect('mongodb+srv://' + process.env.DB_LOG + '@groupomaniadb.jvjkjex
     })
     .then(() => console.log('Connexion à MongoDB Atlas réussie !'))
     .catch(() => console.log('Connexion à MongoDB Atlas échouée !'));
-// middleware CORS 'cross origin resource sharing'
-app.use((req, res, next) => {
-    // accéder à notre API depuis n'importe quelle origine
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    // On ajoute une exeption pour le cross origin ressourses
-    res.setHeader('Cross-Origin-Resource-Policy', 'http://127.0.0.1:4200/');
-    // ajouter les headers mentionnés aux requêtes envoyées vers notre API
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-    // envoyer des requêtes avec les méthodes mentionnées
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-    next();
-});
+
+
+// Configuration middleware CORS 'cross origin resource sharing'
+const corsOptions = {
+    origin: process.env.FRONT_URL,
+    Credential: true,
+    "allowedHeaders": ['sessionId', 'Content-Type'],
+    "exposedHeaders": ['sessionId'],
+    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+    "preflightContinue": false
+}
+
+app.use(cors(corsOptions));
+
 // on configure les option de notre package helmet
 app.use(
     helmet({
