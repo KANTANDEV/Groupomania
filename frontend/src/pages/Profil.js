@@ -1,7 +1,9 @@
 import React from 'react';
 import Log from '../components/Log';
 
+
 const Profil = () => {
+    
     const verifco = document.cookie;
     return (
         <div className='profil-page'>
