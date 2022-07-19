@@ -14,9 +14,9 @@ router.get('/isConnected', userCtrl.isConnected)
 router.get('/logout', auth, userCtrl.logout)
 router.get('/', userCtrl.getAllUsers)
 router.get('/:id', userCtrl.userInfo)
-router.put('/:id',   userCtrl.updateUser)
+router.put('/:id', auth,  userCtrl.updateUser)
 router.delete('/:id', auth, userCtrl.deleteUser)
-router.patch('/follow/:id', auth, userCtrl.follow)
+router.patch('/follow/:id',  userCtrl.follow)
 router.patch('/unfollow/:id',auth, userCtrl.unfollow)
 
 // upload

@@ -74,7 +74,6 @@ export const uploadPicture = (data, id) => {
 
 export const upadateBio = (userId, bio) => {
     return (dispatch) => {
-        console.log(userId, bio)
         return fetch(`${process.env.REACT_APP_API_URL}api/user/${userId}`, {
             method: 'PUT',
             headers: {

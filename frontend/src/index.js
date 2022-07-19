@@ -6,9 +6,12 @@ import { Provider } from 'react-redux';
 import { configureStore} from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
 import rootReducer from './reducers';
+import { getUsers } from './actions/users.actions';
 //Devtool
 // import { composeWithDevTools } from 'redux-devtools-extension';
 import logger from 'redux-logger';
+
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -17,6 +20,8 @@ const store = configureStore({
    middleware: [thunk, logger]
 
 })
+
+store.dispatch(getUsers());
 
 root.render(
     <Provider store={store}>
