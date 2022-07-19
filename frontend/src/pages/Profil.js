@@ -1,5 +1,6 @@
 import React from 'react';
 import Log from '../components/Log';
+import UpdateProfil from '../components/Profil/UpdateProfil';
 
 
 const Profil = () => {
@@ -8,7 +9,7 @@ const Profil = () => {
     return (
         <div className='profil-page'>
             {verifco ? (
-                <h1>UPDATE PAGE </h1>
+                <UpdateProfil/>
             ) : (
             <div className='log-container'>
                 <Log login={false} signup={true} />

@@ -200,7 +200,7 @@ exports.isConnected = (req, res) => {
                 
             } else {
                 res.status(200).json(decodedToken.userId)
-                console.log(decodedToken.userId);
+                // console.log(decodedToken.userId);
             }
         });
     } else {

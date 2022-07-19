@@ -22,8 +22,10 @@ exports.uploadProfil = async (req, res, next) => {
     } catch (err) {
         console.log(err)
         const errors = uploadErrors(err);
-        return res.status(201).json({ errors });
+        return res.status(400).json({ errors });
     }
+
+    
 
     try {
         const docs = await UserModel.findByIdAndUpdate(

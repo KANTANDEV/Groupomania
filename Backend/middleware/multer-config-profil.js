@@ -11,7 +11,7 @@ const MIME_TYPES = {
 //on indique le chemin d'acces des images a mutler
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
-        callback(null, 'uploads/images/profil');
+        callback(null, __dirname + "/../../frontend/public/uploads/images/profil");
     },
     filename: (req, file, callback) => {
         const name = file.originalname.split(' ').join('_');
