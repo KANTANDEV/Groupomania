@@ -1,14 +1,12 @@
 // on importe le package de verification des tokens
 const jwt = require('jsonwebtoken');
-require ('dotenv');
+require('dotenv');
 
 module.exports = (req, res, next) => {
     try {
         // on recupere le cookie de l'utilisateur
-
-
-        console.log('cookie' + cookies.token)
-        const token = req.headers.cookie;
+        const cookies = req.headers.cookie.split(/[=;]/)
+        const token = cookies[cookies.indexOf('token') + 1]
         const decodedToken = jwt.verify(token, process.env.TOKEN);
         const userId = decodedToken.userId;
         req.auth = { userId };
@@ -17,12 +15,13 @@ module.exports = (req, res, next) => {
             throw "identifiant invalide";
         }
 
-        else {
+
         next();
-            }
+
     }
     catch (error) {
         console.log(error);
         res.status(401).json({ error: error + 'requête non authentifiée' });
     }
 }
+

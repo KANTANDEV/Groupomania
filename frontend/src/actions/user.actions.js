@@ -2,6 +2,8 @@ import axios from "axios";
 export const GET_USER = "GET_USER";
 export const UPLOAD_PICTURE = "UPLOAD_PICTURE";
 export const UPADATE_BIO = "UPADATE_BIO";
+export const FOLLOW_USER = "FOLLOW_USER";
+export const UNFOLLOW_USER = "UNFOLLOW_USER";
 
 export const getUser = (uid) => {
     return (dispatch) => {
@@ -19,8 +21,6 @@ export const getUser = (uid) => {
             )
     }
 }
-
-
 
 export const uploadPicture = (data, id) => {
     return (dispatch) => {
@@ -42,36 +42,6 @@ export const uploadPicture = (data, id) => {
     };
   };
 
-// export const uploadPicture = (data, id) => {
-//     return (dispatch) => {
-//         return fetch(`${process.env.REACT_APP_API_URL}api/user/upload/`, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             },
-//             credentials: 'include',
-//                     body: JSON.stringify({
-//                         file: data.picture
-//                     }),
-//         })
-//             .then(res => res.json())
-//             .then((res) => {
-//                 console.log(res)
-//                 fetch(`${process.env.REACT_APP_API_URL}api/user/${id}`, {
-//                     method: 'GET',
-//                 })
-//                     .then(res => res.json())
-//                     .then((res) => {
-//                         dispatch({
-//                             type: UPLOAD_PICTURE,
-//                             payload: res.data.picture
-//                         })
-//                     })
-//             })
-//             .catch((err) => console.log(err))
-//     }
-// }
-
 export const upadateBio = (userId, bio) => {
     return (dispatch) => {
         return fetch(`${process.env.REACT_APP_API_URL}api/user/${userId}`, {
@@ -86,12 +56,47 @@ export const upadateBio = (userId, bio) => {
         })
             .then(res => res.json())
             .then((res) => {
-                console.log(res.bio)
                 dispatch({
                     type: UPADATE_BIO,
                     payload: res.bio
                 })
             })
             .catch((err) => console.log(err))
+    }
+}
+
+export const followUser = (followerId, idToFollow) => {
+    return(dispatch) => {
+        axios.defaults.withCredentials = true
+        return axios({
+            method: "patch",
+            url: `${process.env.REACT_APP_API_URL}api/user/follow/` + followerId,
+            data: {idToFollow}
+        })
+        .then((res) => {
+            dispatch({
+                type: FOLLOW_USER,
+                payload: {idToFollow}
+            })
+        })
+        .catch((err) => console.log(err))
+    }
+}
+
+export const unfollowUser = (followerId, idToUnfollow) => {
+    return(dispatch) => {
+        axios.defaults.withCredentials = true
+        return axios({
+            method: "patch",
+            url: `${process.env.REACT_APP_API_URL}api/user/unfollow/` + followerId,
+            data: {idToUnfollow}
+        })
+        .then((res) => {
+            dispatch({
+                type: UNFOLLOW_USER,
+                payload: {idToUnfollow}
+            })
+        })
+        .catch((err) => console.log(err))
     }
 }

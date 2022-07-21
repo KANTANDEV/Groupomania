@@ -21,7 +21,7 @@ const MIME_TYPES = {
 //on indique le chemin d'acces des images a mutler
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
-        callback(null, 'uploads/images/posts');
+        callback(null, __dirname + "/../../frontend/public/uploads/images/posts");
     },
     filename: (req, file, callback) => {
         const name = file.originalname.split(' ').join('_');
@@ -33,4 +33,4 @@ const storage = multer.diskStorage({
 module.exports = multer({
     storage,
     limits: { fileSize: 500000 },
-   }).single('file');
+   }).single('post');

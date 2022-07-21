@@ -11,7 +11,7 @@ router.post('/', auth, post, postController.createPost);
 router.get('/', postController.readPost);
 router.put('/:id', auth, post, postController.updatePost);
 router.delete('/:id', auth, postController.deletePost);
-router.patch('/like-post/:id',  auth,postController.likePost);
+router.patch('/like-post/:id', auth, postController.likePost);
 router.patch('/unlike-post/:id', auth, postController.unlikePost);
 //Comments
 router.patch('/comment-post/:id', auth, postController.commentPost);

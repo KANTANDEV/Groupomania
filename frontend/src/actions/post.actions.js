@@ -1,0 +1,93 @@
+import axios from 'axios';
+
+//posts
+export const GET_POSTS = 'GET_POSTS';
+export const LIKE_POST = 'LIKE_POST';
+export const UNLIKE_POST = 'UNLIKE_POST';
+export const UPDATE_POST = 'UPDATE_POST';
+export const DELETE_POST = 'DELETE_POST';
+
+export const getPosts = (num) => {
+    return (dispatch) => {
+        return axios
+            .get(`${process.env.REACT_APP_API_URL}api/post/`)
+            .then(res => {
+                const array = res.data.slice(0, num);
+                dispatch({
+                    type: GET_POSTS,
+                    payload: array
+                })
+            })
+            .catch(err => console.log(err));
+    }
+}
+
+export const likePost = (postId, userId) => {
+    return (dispatch) => {
+        axios.defaults.withCredentials = true
+        return axios({
+            method: 'patch',
+            url: `${process.env.REACT_APP_API_URL}api/post/like-post/` + postId,
+            data: { id: userId },
+            WithCreditentials: true,
+        })
+            .then(res => {
+                dispatch({
+                    type: LIKE_POST,
+                    payload: { postId, userId }
+                })
+            })
+            .catch(err => console.log(err));
+    }
+}
+
+export const unlikePost = (postId, userId) => {
+    return (dispatch) => {
+        axios.defaults.withCredentials = true
+        return axios({
+            method: 'patch',
+            url: `${process.env.REACT_APP_API_URL}api/post/unlike-post/` + postId,
+            data: { id: userId },
+            WithCreditentials: true,
+        })
+            .then(res => {
+                dispatch({
+                    type: UNLIKE_POST,
+                    payload: { postId, userId }
+                })
+            })
+            .catch(err => console.log(err));
+    }
+}
+
+export const updatePost = (postId, message, uid) => {
+    return (dispatch) => {
+        axios.defaults.withCredentials = true
+        return axios({
+            method: 'put',
+            url: `${process.env.REACT_APP_API_URL}api/post/${postId}`,
+            data: { message : message, id: uid },
+            WithCreditentials: true,
+        })
+            .then(res => {
+                dispatch({ type: UPDATE_POST, payload: { message, postId } })
+            })
+            .catch(err => console.log(err));
+    }
+}
+
+export const deletePost = (postId, uid ) => {
+    return (dispatch) => {
+        axios.defaults.withCredentials = true
+        return axios({
+            method: 'delete',
+            url: `${process.env.REACT_APP_API_URL}api/post/${postId}` ,
+            data: { id: uid },
+            WithCreditentials: true,
+        })
+            .then(res => {
+                dispatch({ type: DELETE_POST, payload: { postId } })
+            })
+            .catch(err => console.log(err));
+    }
+}

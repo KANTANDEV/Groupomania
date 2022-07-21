@@ -5,6 +5,7 @@ import UploadImg from './UploadImg';
 import { useState } from 'react';
 import { upadateBio } from '../../actions/user.actions';
 import { dateParser } from '../Utils';
+import FollowHandler from './FollowHandler';
 
 const UpdateProfil = () => {
     const [bio, setBio] = useState('');
@@ -59,17 +60,19 @@ const UpdateProfil = () => {
                         <span className='cross' onClick={() => setFollowingPopup(false)}>&#10005;</span>
                         <ul>
                             {usersData.map((user) => {
-                                for (let i = 0; i < userData.following.length; i++)
+                                for (let i = 0; i < userData.following.length; i++) {
                                     if (user._id === userData.following[i])
                                         return (
                                             <li key={user._id}>
                                                 <img src={user.picture} alt='user-pic' />
                                                 <h4>{user.pseudo}</h4>
-                                                <h1>FOLLOW HANDLER</h1>
+                                                <div className='follow-handler'>
+                                                    <FollowHandler idToFollow={user._id} type={'suggestion'} />
+                                                </div>
                                             </li>
-                                        );
-                            }
-                            )}
+                                        )
+                                } return null;
+                            })}
 
                         </ul>
                     </div>
@@ -81,17 +84,19 @@ const UpdateProfil = () => {
                         <span className='cross' onClick={() => setFollowersPopup(false)}>&#10005;</span>
                         <ul>
                             {usersData.map((user) => {
-                                for (let i = 0; i < userData.followers.length; i++)
+                                for (let i = 0; i < userData.followers.length; i++) {
                                     if (user._id === userData.followers[i])
                                         return (
                                             <li key={user._id}>
                                                 <img src={user.picture} alt='user-pic' />
                                                 <h4>{user.pseudo}</h4>
-                                                <h1>FOLLOW HANDLER</h1>
+                                                <div className='follow-handler'>
+                                                    <FollowHandler idToFollow={user._id} type={'suggestion'} />
+                                                </div>
                                             </li>
                                         );
-                            }
-                            )}
+                                } return null;
+                            })}
 
                         </ul>
                     </div>

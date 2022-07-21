@@ -6,6 +6,7 @@ const ObjectID = require("mongoose").Types.ObjectId;
 // on importe le package file systeme de node
 const fs = require("fs");
 const { uploadErrors } = require("../utils/errors");
+const post = require("../models/post");
 
 exports.readPost = (req, res) => {
   PostModel.find((err, docs) => {
@@ -17,9 +18,9 @@ exports.readPost = (req, res) => {
   }).sort({ createdAt: -1 });
 };
 
+
 exports.createPost = async (req, res) => {
   let filename;
-
   if (req.file != null) {
     try {
       if (
@@ -41,11 +42,18 @@ exports.createPost = async (req, res) => {
     filename = req.body.userId + Date.now() + ".jpg";
   }
 
+  //Si il ya une video en chercher si dans l'url de la video il y a un /watch et on le remplace par un /embed
+  if (req.body.video != null) {
+    if (req.body.video.includes("/watch?v=")) {
+      req.body.video = req.body.video.replace("/watch?v=", "/embed/");
+    }
+  }
+
   const newPost = new PostModel({
     userId: req.body.userId,
     message: req.body.message,
     video: req.body.video,
-    picture: req.file != null ? "uploads/images/posts/" + filename : null,
+    picture: req.file != null ? "./uploads/images/posts/" + req.file.filename : null,
     likers: [],
     comments: [],
   });
@@ -53,14 +61,21 @@ exports.createPost = async (req, res) => {
   try {
     const post = await newPost.save();
     res.send(post);
-  } catch {
-    res.status(400).send("Error to create data");
+  } catch (err) {
+    return res.status(500).json({ message: err });
   }
 };
+
+
 
 exports.updatePost = async (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown : " + req.params.id);
+  
+  
+
+    const user = await UserModel.findById(req.body.id);
+    
 
   let filename;
 
@@ -85,10 +100,10 @@ exports.updatePost = async (req, res) => {
     filename = req.body.userId + Date.now() + ".jpg";
   }
 
-  const user = await UserModel.findById(req.body.userId);
+  
 
   PostModel.findOne({ _id: req.params.id }, (err, post) => {
-    if (post.userId == req.body.userId || user.admin) {
+    if (post.userId == req.body.id || user.admin) {
       post.message = req.body.message;
       post.video = req.body.video;
       post.picture = req.file != null ? "uploads/images/posts/" + filename : null,
@@ -100,7 +115,7 @@ exports.updatePost = async (req, res) => {
           }
         });
     } else {
-      fs.unlinkSync(req.file.path);
+      // fs.unlinkSync(req.file.path);
       res.send("Vous n'avez pas les droits pour modifier ce post");
     }
   });
@@ -108,9 +123,9 @@ exports.updatePost = async (req, res) => {
 
 exports.deletePost = async (req, res) => {
   if (!ObjectID.isValid(req.params.id))
-    return res.status(400).send("ID unknown : " + req.params.id);
+    return res.status(400).send("ID unknown : " + req.params.postid);
 
-  const user = await UserModel.findById(req.body.userId);
+    const user = await UserModel.findById(req.body.id);
 
   PostModel.findOne({ _id: req.params.id }, (err, post) => {
     if (post.userId == req.body.userId || user.admin) {
@@ -233,7 +248,7 @@ exports.editCommentPost = (req, res) => {
 
       const user = UserModel.findById(req.body.commenterId);
 
-      if(theComment.userId != req.body.commentId || user.admin == false ) return res.status(400).send("Vous n'avez pas les droits pour modifier ce commentaire");
+      if (theComment.userId != req.body.commentId || user.admin == false) return res.status(400).send("Vous n'avez pas les droits pour modifier ce commentaire");
 
       return docs.save((err) => {
         if (!err) res.status(200).send(docs);
@@ -251,7 +266,7 @@ exports.deleteCommentPost = (req, res) => {
 
   try {
     const user = UserModel.findById(req.body.commenterId);
-    if ( req.body.commentId != user._id || user.admin == false ) return res.status(400).send("Vous n'avez pas les droits pour supprimer ce commentaire");
+    if (req.body.commentId != user._id || user.admin == false) return res.status(400).send("Vous n'avez pas les droits pour supprimer ce commentaire");
     return PostModel.findByIdAndUpdate(
       req.params.id,
       {

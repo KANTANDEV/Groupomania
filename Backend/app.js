@@ -36,7 +36,9 @@ const corsOptions = {
     "allowedHeaders": ['sessionId', 'Content-Type'],
     "exposedHeaders": ['sessionId'],
     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-    "preflightContinue": false
+    "preflightContinue": false,
+    "X-Frame-Options":  "ALLOW-FROM http://localhost:3000" || "ALLOW-FROM http://localhost:4000" || "ALLOW-FROM https://www.youtube.com/",
+    
 }
 
 app.use(cors(corsOptions));
