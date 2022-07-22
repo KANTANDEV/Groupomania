@@ -6,6 +6,8 @@ import LikeButton from './LikeButton';
 import { updatePost } from '../../actions/post.actions';
 import { UidContext } from '../AppContext';
 import DeleteCard from './DeleteCard';
+import CardComments from './CardComments';
+
 
 const Card = ({ post }) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -15,6 +17,7 @@ const Card = ({ post }) => {
     const userData = useSelector(state => state.userReducer);
     const dispatch = useDispatch();
     const uid = useContext(UidContext);
+    const [showComments, setShowComments] = useState(false);
 
     const updateItem = () => {
         if (textUpdate) {
@@ -63,7 +66,7 @@ const Card = ({ post }) => {
                                 <textarea
                                     defaultValue={post.message}
                                     onChange={(e) => setTextUpdate(e.target.value)}
-                                />
+                                /> 
                                 <div className='button-container'>
                                     <button className='btn' onClick={updateItem}>
                                         Valider modifications
@@ -90,18 +93,18 @@ const Card = ({ post }) => {
                                 <div onClick={() => setIsUpdated(!isUpdated)}>
                                     <img src="./img/icons/edit.svg" alt="edit" />
                                 </div>
-                                    <DeleteCard id={post._id}/>
+                                <DeleteCard id={post._id} />
                             </div>
                         )}
                         <div className='card-footer'>
                             <div className='comment-icon'>
-                                <img src="/img/icons/message1.svg" alt="comment" />
+                                <img onClick={() => setShowComments(!showComments)} src="/img/icons/message1.svg" alt="comment" />
                                 <span>{post.comments.length}</span>
                             </div>
                             <LikeButton post={post} />
                             <img src="./img/icons/share.svg" alt="share" />
                         </div>
-
+                        {showComments && <CardComments post={post} />}
                     </div>
                 </>
             )}

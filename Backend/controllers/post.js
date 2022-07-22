@@ -20,8 +20,10 @@ exports.readPost = (req, res) => {
 
 
 exports.createPost = async (req, res) => {
-  let filename;
-  if (req.file != null) {
+  let filename ;
+  
+  console.log(req.file);
+  if (req.post != null) {
     try {
       if (
         req.file.mimetype != "image/jpg" &&
@@ -71,11 +73,11 @@ exports.createPost = async (req, res) => {
 exports.updatePost = async (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown : " + req.params.id);
-  
-  
 
-    const user = await UserModel.findById(req.body.id);
-    
+
+
+  const user = await UserModel.findById(req.body.id);
+
 
   let filename;
 
@@ -100,7 +102,7 @@ exports.updatePost = async (req, res) => {
     filename = req.body.userId + Date.now() + ".jpg";
   }
 
-  
+
 
   PostModel.findOne({ _id: req.params.id }, (err, post) => {
     if (post.userId == req.body.id || user.admin) {
@@ -125,12 +127,13 @@ exports.deletePost = async (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown : " + req.params.postid);
 
-    const user = await UserModel.findById(req.body.id);
+  const user = await UserModel.findById(req.body.id);
 
   PostModel.findOne({ _id: req.params.id }, (err, post) => {
-    if (post.userId == req.body.userId || user.admin) {
+    if (post.userId == req.body.id || user.admin) {
       post.remove((err, doc) => {
         if (!err) {
+          // fs.unlinkSync( "/../../uploads/images/posts", () => {});
           res.send(doc);
         } else {
           console.log("Error to delete data :" + err);
@@ -234,9 +237,12 @@ exports.commentPost = (req, res) => {
   }
 };
 
-exports.editCommentPost = (req, res) => {
+exports.editCommentPost = async (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown : " + req.params.id);
+
+  const user = await UserModel.findById(req.body.id);
+
 
   try {
     return PostModel.findById({ _id: req.params.id }, (err, docs) => {
@@ -244,11 +250,12 @@ exports.editCommentPost = (req, res) => {
         comment._id.equals(req.body.commentId)
       );
       if (!theComment) return res.status(400).send("Comment not found");
-      theComment.text = req.body.text;
-
-      const user = UserModel.findById(req.body.commenterId);
-
-      if (theComment.userId != req.body.commentId || user.admin == false) return res.status(400).send("Vous n'avez pas les droits pour modifier ce commentaire");
+      if (theComment.commenterId === user.id || user.admin === true) {
+        theComment.text = req.body.text;
+      }
+      else {
+        return res.status(400).send("Vous n'avez pas les droits pour modifier ce commentaire")
+      }
 
       return docs.save((err) => {
         if (!err) res.status(200).send(docs);
@@ -260,29 +267,31 @@ exports.editCommentPost = (req, res) => {
   }
 };
 
-exports.deleteCommentPost = (req, res) => {
+exports.deleteCommentPost = async (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown : " + req.params.id);
 
-  try {
-    const user = UserModel.findById(req.body.commenterId);
-    if (req.body.commentId != user._id || user.admin == false) return res.status(400).send("Vous n'avez pas les droits pour supprimer ce commentaire");
-    return PostModel.findByIdAndUpdate(
-      req.params.id,
-      {
-        $pull: {
-          comments: {
-            _id: req.body.commentId,
+  const user = await UserModel.findById(req.body.id);
+
+  if (req.body.commenterId === user.id || user.admin) {
+    try {
+      return PostModel.findByIdAndUpdate(
+        req.params.id,
+        {
+          $pull: {
+            comments: {
+              _id: req.body.commentId,
+            },
           },
         },
-      },
-      { new: true },
-      (err, doc) => {
-        if (!err) res.send(doc);
-        else return res.status(400).send(err);
-      }
-    );
-  } catch (err) {
-    return res.status(400).json({ message: err });
-  }
+        { new: true },
+        (err, doc) => {
+          if (!err) res.send(doc);
+          else return res.status(400).send(err);
+        }
+      ).clone();
+    } catch (err) {
+      return res.status(400).json({ message: err });
+    }
+  } else return res.status(400).send("Vous n'avez pas les droits pour supprimer ce commentaire")
 };

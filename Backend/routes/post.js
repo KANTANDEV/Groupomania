@@ -7,7 +7,7 @@ const auth = require('../middleware/auth');
 const post = require('../middleware/multer-config-post');
 // On cree notre CRUD
 //POSTS
-router.post('/', auth, post, postController.createPost);
+router.post('/',  post, postController.createPost);
 router.get('/', postController.readPost);
 router.put('/:id', auth, post, postController.updatePost);
 router.delete('/:id', auth, postController.deletePost);

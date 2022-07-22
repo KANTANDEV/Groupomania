@@ -8,6 +8,14 @@ export const dateParser = (num) => {
     return date.toString();
 }
 
+export const timestampParser = (num) => {
+    let options = { weekday: "long", month: "short", day: "numeric", year: "numeric" };
+
+    let date = new Date(num).toLocaleDateString("fr-FR", options)
+
+    return date.toString();
+}
+
 export const isEmpty = (value) => {
     return (
         value === undefined || value === null ||

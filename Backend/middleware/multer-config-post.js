@@ -33,4 +33,4 @@ const storage = multer.diskStorage({
 module.exports = multer({
     storage,
     limits: { fileSize: 500000 },
-   }).single('post');
+   }).single('file');
