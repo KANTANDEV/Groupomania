@@ -3,6 +3,7 @@ import axios from 'axios';
 
 //posts
 export const GET_POSTS = 'GET_POSTS';
+export const GET_ALL_POSTS = 'GET_ALL_POSTS';
 export const ADD_POST = 'ADD_POST';
 export const LIKE_POST = 'LIKE_POST';
 export const UNLIKE_POST = 'UNLIKE_POST';
@@ -14,9 +15,8 @@ export const ADD_COMMENTS = 'ADD_COMMENTS';
 export const EDIT_COMMENTS = 'EDIT_COMMENTS';
 export const DELETE_COMMENTS = 'DELETE_COMMENTS';
 
-
-
-
+//trends
+export const GET_TRENDS = 'GET_TRENDS';
 
 //POSTS
 export const getPosts = (num) => {
@@ -29,6 +29,10 @@ export const getPosts = (num) => {
                     type: GET_POSTS,
                     payload: array
                 })
+                dispatch({
+                    type: GET_ALL_POSTS,
+                    payload: res.data
+                })
             })
             .catch(err => console.log(err));
     }
@@ -40,7 +44,7 @@ export const addPost = (data) => {
         return axios({
             method: 'post',
             url: `${process.env.REACT_APP_API_URL}api/post/`,
-            data: data ,
+            data: data,
             WithCreditentials: true,
         })
     }
@@ -90,7 +94,7 @@ export const updatePost = (postId, message, uid) => {
         return axios({
             method: 'put',
             url: `${process.env.REACT_APP_API_URL}api/post/${postId}`,
-            data: { message : message, id: uid },
+            data: { message: message, id: uid },
             WithCreditentials: true,
         })
             .then(res => {
@@ -100,25 +104,25 @@ export const updatePost = (postId, message, uid) => {
     }
 }
 
-export const deletePost = (postId, uid ) => {
+export const deletePost = (postId, uid) => {
     return (dispatch) => {
         axios.defaults.withCredentials = true
         return axios({
             method: 'delete',
-            url: `${process.env.REACT_APP_API_URL}api/post/${postId}` ,
+            url: `${process.env.REACT_APP_API_URL}api/post/${postId}`,
             data: { id: uid },
             WithCreditentials: true,
         })
             .then(res => {
                 dispatch({ type: DELETE_POST, payload: { postId } })
-               
+
             })
             .catch(err => console.log(err));
     }
 }
 
 //COMMENTS
-export const addComment = (postId, commenterId, text,commenterPseudo, uid) => {
+export const addComment = (postId, commenterId, text, commenterPseudo, uid) => {
     return (dispatch) => {
         axios.defaults.withCredentials = true
         return axios({
@@ -140,7 +144,7 @@ export const editComment = (postId, commentId, text, uid) => {
         return axios({
             method: 'patch',
             url: `${process.env.REACT_APP_API_URL}api/post/edit-comment-post/${postId}`,
-            data: { commentId, text, id :  uid  },
+            data: { commentId, text, id: uid },
             WithCreditentials: true,
         })
             .then(res => {
@@ -156,12 +160,20 @@ export const deleteComment = (postId, commentId, uid, commenterId) => {
         return axios({
             method: 'patch',
             url: `${process.env.REACT_APP_API_URL}api/post/delete-comment-post/${postId}`,
-            data: { commentId, id :  uid , commenterId },
+            data: { commentId, id: uid, commenterId },
             WithCreditentials: true,
         })
             .then(res => {
                 dispatch({ type: DELETE_COMMENTS, payload: { postId, commentId } })
             })
             .catch(err => console.log(err));
+    }
+}
+
+//TRENDS
+
+export const getTrends = (sortedArray) => {
+    return (dispatch) => {
+        dispatch({ type: GET_TRENDS, payload: sortedArray })
     }
 }

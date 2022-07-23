@@ -6,6 +6,7 @@ import { addPost, getPosts } from '../../actions/post.actions';
 
 
 
+
 const NewPostForm = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [message, setMessage] = useState("");
@@ -14,10 +15,10 @@ const NewPostForm = () => {
     const [file, setFile] = useState();
     const userData = useSelector(state => state.userReducer);
     const dispatch = useDispatch();
+    
 
 
-
-    const handlePost =  async () => {
+    const handlePost = async () => {
         if (message || postPicture || video) {
             const data = new FormData();
             data.append('userId', userData._id);
@@ -47,23 +48,21 @@ const NewPostForm = () => {
         setFile(null);
     }
 
-    const handleVideo = () => {
-        let findLink = message.split(" ");
-        for (let i = 0; i < findLink.length; i++) {
-            if (findLink[i].includes("https://www.youtube.com" || findLink[i].includes('https://youtube'))) {
-                let embed = findLink[i].replace("watch?v=", "embed/");
-                //on traite le time watch de la video
-                setVideo(embed.split('&')[0]);
-                findLink.splice(i, 1);
-                setMessage(findLink.join(" "));
-                setPostPicture('');
-            }
-        }
-    }
-
     useEffect(() => {
-        if (isEmpty(userData)) {
-            setIsLoading(false);
+        if (!isEmpty(userData)) setIsLoading(false);
+
+        const handleVideo = () => {
+            let findLink = message.split(" ");
+            for (let i = 0; i < findLink.length; i++) {
+                if (findLink[i].includes("https://www.youtube.com" || findLink[i].includes('https://youtube'))) {
+                    let embed = findLink[i].replace("watch?v=", "embed/");
+                    //on traite le time watch de la video
+                    setVideo(embed.split('&')[0]);
+                    findLink.splice(i, 1);
+                    setMessage(findLink.join(" "));
+                    setPostPicture('');
+                }
+            }
         }
         handleVideo();
     }, [userData, message, video])
@@ -135,10 +134,13 @@ const NewPostForm = () => {
                                     <button onClick={() => setVideo('')}>Supprimer video</button>
                                 )}
                             </div>
+                            {postPicture && file.size > 500000 && (
+                                <p className='error'>Veuillez choisir une image de moins de 500Ko !</p>
+                            )}
                             <div className='btn-send'>
-                                {message || postPicture || video.length > 20 ?(
-                                <button className="cancel" onClick={cancelPost}>Annuler message</button>
-                                ) : null }
+                                {message || postPicture || video.length > 20 ? (
+                                    <button className="cancel" onClick={cancelPost}>Annuler message</button>
+                                ) : null}
                                 <button className='send' onClick={handlePost}>Envoyer</button>
                             </div>
                         </div>

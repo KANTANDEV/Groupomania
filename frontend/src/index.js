@@ -7,6 +7,7 @@ import { configureStore} from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
 import rootReducer from './reducers';
 import { getUsers } from './actions/users.actions';
+import { getPosts } from './actions/post.actions';
 //Devtool
 // import { composeWithDevTools } from 'redux-devtools-extension';
 import logger from 'redux-logger';
@@ -22,6 +23,7 @@ const store = configureStore({
 })
 
 store.dispatch(getUsers());
+store.dispatch(getPosts());
 
 root.render(
     <Provider store={store}>

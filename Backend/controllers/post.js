@@ -7,6 +7,7 @@ const ObjectID = require("mongoose").Types.ObjectId;
 const fs = require("fs");
 const { uploadErrors } = require("../utils/errors");
 const post = require("../models/post");
+const path = require("path");
 
 exports.readPost = (req, res) => {
   PostModel.find((err, docs) => {
@@ -39,7 +40,7 @@ exports.createPost = async (req, res) => {
     } catch (err) {
       console.log(err);
       const errors = uploadErrors(err);
-      return res.status(201).json({ errors });
+      return res.status(201).send({ errors });
     }
     filename = req.body.userId + Date.now() + ".jpg";
   }
@@ -64,7 +65,7 @@ exports.createPost = async (req, res) => {
     const post = await newPost.save();
     res.send(post);
   } catch (err) {
-    return res.status(500).json({ message: err });
+    return res.status(500).send({ err });
   }
 };
 
@@ -133,7 +134,6 @@ exports.deletePost = async (req, res) => {
     if (post.userId == req.body.id || user.admin) {
       post.remove((err, doc) => {
         if (!err) {
-          // fs.unlinkSync( "/../../uploads/images/posts", () => {});
           res.send(doc);
         } else {
           console.log("Error to delete data :" + err);

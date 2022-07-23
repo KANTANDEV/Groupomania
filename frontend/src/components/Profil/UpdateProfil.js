@@ -31,6 +31,8 @@ const UpdateProfil = () => {
                     <img src={userData.picture} alt='user-pic' />
                     <UploadImg />
 
+                    
+                    
                 </div>
                 <div className='right-part'>
                     <div className='bio-update'>

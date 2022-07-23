@@ -7,8 +7,10 @@ const UploadImg = () => {
     const [file, setFile] = useState(null);
     const dispatch = useDispatch(null);
     const userData = useSelector((state) => state.userReducer);
+   
 
     const handlePicture = (e) => {
+
         e.preventDefault();
         const data = new FormData();
         data.append('name', userData.pseudo);
@@ -28,7 +30,11 @@ const UploadImg = () => {
             <br />
             <input type='submit' value='Envoyer' />
         </form>
-    );
-};
+    )
+}
+
+
+//     );
+// };
 
 export default UploadImg;
