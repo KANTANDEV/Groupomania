@@ -17,10 +17,15 @@ Set-ExecutionPolicy -ExecutionPolicy Unrestricted
 <!>Cree un fichier .env dans le dossier Backend comme ceci :
 
 DB_LOG = identifiant + mot de passe de votre base de donnee mongoDB. Exemple : DB_LOG = admin:admin
+
 TOKEN = cree un token avec un site comme " https://randomkeygen.com/"
+
 FRONT_URL =http://localhost:3000
+
 <!>Cree un fichier .env dans le dossier Backend comme ceci :
+
 REACT_APP_API_URL=http://localhost:4000/
+
 <!>Assurez-vous également d'avoir vos ports localhost:3000 et localhost:5000 non utilisés.
 
 ------------------------------------------------------------------------------------------------------------------------
