@@ -1,7 +1,11 @@
 ------------------------------------------------------------ VISUEL ------------------------------------------------------------
+
+
 ![Capture](https://user-images.githubusercontent.com/94462048/180648260-f8ba51f5-f9f9-46b3-be05-11220ee3f744.PNG)
 ![Capture1](https://user-images.githubusercontent.com/94462048/180648263-75933eef-e1b7-4e1f-a603-c9f1f2da3764.PNG)
 ![Capture3](https://user-images.githubusercontent.com/94462048/180648265-9e559a2c-f7a5-4ca2-a2df-b9ff3fc41fed.PNG)
+
+
 ------------------------------------------------------------ INSTALLATION ------------------------------------------------------------
 
 <!> Avant de commencer, assurez-vous d'avoir nodejs et npm installés sur votre système.
@@ -19,11 +23,15 @@ FRONT_URL =http://localhost:3000
 REACT_APP_API_URL=http://localhost:4000/
 <!>Assurez-vous également d'avoir vos ports localhost:3000 et localhost:5000 non utilisés.
 
+------------------------------------------------------------------------------------------------------------------------
+
 1- Télécharger les fichiers.
 
 Au dessus des fichiers présents sur le repository Git, vous pouvez télécharger ou cloner le dossier, je vous recommande
 de télécharger le fichier ZIP tout simplement, et d'extraire son contenu à l'emplacement souhaité sur votre ordinateur,
 sur le bureau par exemple.
+
+------------------------------------------------------------------------------------------------------------------------
 
 2- Installer l'application Backend.
 
@@ -35,6 +43,8 @@ Executez la commande:
 npm install
 
 L'installation des différentes dépendances devrait s'effectuer automatiquement.
+
+------------------------------------------------------------------------------------------------------------------------
 
 3- Lancer l'application Backend.
 Une fois l'application installée, dans votre terminal, toujours dans le dossier
@@ -56,6 +66,9 @@ Connexion à MongoDB Atlas réussie !
 //l'application backend est en fonctionnement.
 
 
+------------------------------------------------------------------------------------------------------------------------
+
+
 4- Installer l'application Frontend.
 Pour installer l'application frontend, ouvrez un nouveau terminal, cette fois-ci rendez-vous dans le dossier
 
@@ -65,6 +78,9 @@ Executez la commande:
 
 npm install
 L'installation des différentes dépendances de l'application frontend s'opèrera.
+
+
+------------------------------------------------------------------------------------------------------------------------
 
 5- Lancer l'application Frontend.
 Comme pour l'application backend, une fois les dépendances installées, dans le dossier 
@@ -92,5 +108,5 @@ Un onglet devrait s'ouvrir dans votre navigateur, et vous mener directement sur 
 Si le message dans le terminal correspond, mais qu'aucun onglet ni fenêtre s'ouvre automatiquement, 
 rendez-vous manuellement à l'adresse http://localhost:3000/ dans votre navigateur.
 
-
+------------------------------------------------------------------------------------------------------------------------
  
