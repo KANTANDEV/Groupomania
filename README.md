@@ -1,8 +1,8 @@
------------------------------------------------------------- VISUEL -------------------------------------------------------------------------------------------
+------------------------------------------------------------ VISUEL ------------------------------------------------------------
 ![Capture](https://user-images.githubusercontent.com/94462048/180648260-f8ba51f5-f9f9-46b3-be05-11220ee3f744.PNG)
 ![Capture1](https://user-images.githubusercontent.com/94462048/180648263-75933eef-e1b7-4e1f-a603-c9f1f2da3764.PNG)
 ![Capture3](https://user-images.githubusercontent.com/94462048/180648265-9e559a2c-f7a5-4ca2-a2df-b9ff3fc41fed.PNG)
------------------------------------------------------------- INSTALLATION --------------------------------------------------------------------------------------
+------------------------------------------------------------ INSTALLATION ------------------------------------------------------------
 
 <!> Avant de commencer, assurez-vous d'avoir nodejs et npm installés sur votre système.
 <!> Avant de commencer, assurez-vous d'avoir nodemon  sur votre système.
