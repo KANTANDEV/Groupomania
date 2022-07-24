@@ -7,6 +7,7 @@ import allPostsReducer from './allPosts.reducer';
 import trendingReducer from './trending.reducer';
 
 
+
 export default combineReducers({
     userReducer,
     usersReducer,

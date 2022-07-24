@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { getUser } from '../actions/user.actions';
+
 
 const LeftNav = () => {
     return (

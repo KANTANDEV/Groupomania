@@ -7,7 +7,7 @@ const UploadImg = () => {
     const [file, setFile] = useState(null);
     const dispatch = useDispatch(null);
     const userData = useSelector((state) => state.userReducer);
-   
+
 
     const handlePicture = (e) => {
 
@@ -26,9 +26,16 @@ const UploadImg = () => {
         <form action='' onSubmit={handlePicture} className='upload-pic'>
             <label htmlFor='file'>Changer votre photo de profil</label>
             <input type='file' id='file' name='file' accept='.jpg, .jpeg, .png, .gif' onChange={(e) => setFile(e.target.files[0])} />
-            
+
             <br />
             <input type='submit' value='Envoyer' />
+            {file && !file.name.match(/\.(jpg|jpeg|png|gif)$/) ? (
+                <p className='error'>Veuillez choisir une image valide</p>
+            ) : null}
+
+            {file && file.size > 500000 && (
+                <p className='error'>Veuillez choisir une image de moins de 500Ko !</p>
+            )}
         </form>
     )
 }

@@ -134,7 +134,12 @@ const NewPostForm = () => {
                                     <button onClick={() => setVideo('')}>Supprimer video</button>
                                 )}
                             </div>
-                            {postPicture && file.size > 500000 && (
+                        
+                            {file && !file.name.match(/\.(jpg|jpeg|png|gif)$/) ? (
+                                <p className='error'>Veuillez choisir une image valide</p>
+                            ) : null}
+                            
+                            {file && file.size > 500000 && (
                                 <p className='error'>Veuillez choisir une image de moins de 500Ko !</p>
                             )}
                             <div className='btn-send'>

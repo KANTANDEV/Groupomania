@@ -31,12 +31,13 @@ mongoose.connect('mongodb+srv://' + process.env.DB_LOG + '@groupomaniadb.jvjkjex
 
 // Configuration middleware CORS 'cross origin resource sharing'
 const corsOptions = {
-    origin: process.env.FRONT_URL,
-    Credential: true,
-    "allowedHeaders": ['sessionId', 'Content-Type'],
-    "exposedHeaders": ['sessionId'],
-    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-    "preflightContinue": false,
+    origin: ["http://localhost:3000", "*"],
+    default: "http://localhost:3000",
+    credentials: true,
+    allowedHeaders: ["sessionId", "Content-Type"],
+    exposedHeaders: ["sessionId"],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    preflightContinue: false,
     "X-Frame-Options":  "ALLOW-FROM http://localhost:3000" || "ALLOW-FROM http://localhost:4000" || "ALLOW-FROM https://www.youtube.com/",
     
 }

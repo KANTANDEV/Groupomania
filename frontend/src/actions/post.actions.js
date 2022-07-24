@@ -18,6 +18,7 @@ export const DELETE_COMMENTS = 'DELETE_COMMENTS';
 //trends
 export const GET_TRENDS = 'GET_TRENDS';
 
+
 //POSTS
 export const getPosts = (num) => {
     return (dispatch) => {
