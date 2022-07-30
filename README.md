@@ -8,6 +8,15 @@
 
 ------------------------------------------------------------ INSTALLATION ------------------------------------------------------------
 
+
+------------------------------------------------------------ Pour le jury ------------------------------------------------------------
+
+La base de donnee est hebergé en ligne vous y avait acces avec les variables d'environements celle ci sont deja incluse dans le projet
+uploadé sur openclassrooms, vous pouvez donc sauté l'etape de la création de vaiables d'environement.
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
 <!> Avant de commencer, assurez-vous d'avoir nodejs et npm installés sur votre système.
 <!> Avant de commencer, assurez-vous d'avoir nodemon  sur votre système.
 Si ce n'est pas le cas rendez vous dans le dossier du projet et executer la commande : npm install -g nodemon
